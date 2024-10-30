@@ -2,14 +2,14 @@ import { User, WithId } from "../models";
 import { SurrealDBRepo } from "../repo";
 
 export class UserMediator {
-    db: SurrealDBRepo
+    repo: SurrealDBRepo
 
-    constructor(db: SurrealDBRepo) {
-        this.db = db;
+    constructor(repo: SurrealDBRepo) {
+        this.repo = repo;
     }
 
     async get_user(id: String): Promise<WithId<User>> {
-        const maybeUser = await this.db.get_user(id.toString());
+        const maybeUser = await this.repo.get_user(id.toString());
         if (maybeUser == null) {
             throw new Error("user not found");
         }
@@ -21,6 +21,6 @@ export class UserMediator {
         const user: User = {
             name: name
         }
-        return await this.db.create_user(user);
+        return await this.repo.create_user(user);
     }
 }

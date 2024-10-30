@@ -55,9 +55,9 @@ export class SurrealDBRepo {
         const sql = `SELECT discard FROM game:${game_id} fetch discard`;
 
         const result = await this.db.query(sql);
-        const discard = result[0] as WithId<Discard>[];
+        const discard = result[0] as { discard: WithId<Discard> }[];
 
-        return discard[0] ? discard[0] : null;
+        return discard[0] ? discard[0].discard : null;
     }
 
     async create_user(user: User): Promise<WithId<User>> {

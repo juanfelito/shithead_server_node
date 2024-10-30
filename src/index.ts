@@ -1,15 +1,25 @@
-import { RecordId } from "surrealdb";
 import { SurrealDBRepo } from "./repo";
 import { User } from "./models";
 
 import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
-import resolvers from './resolvers/user';
+import { mergeResolvers } from "@graphql-tools/merge";
+
+import { user_resolvers } from "./resolvers/user";
+import { game_resolvers } from "./resolvers/game";
 
 async function start() {
     const typeDefs = gql`
         ${require('fs').readFileSync(require.resolve('./schema.graphql'), 'utf8')}
     `;
+
+    const repo = new SurrealDBRepo();
+    await repo.init();
+
+    const user = user_resolvers(repo);
+    const game = game_resolvers(repo);
+
+    const resolvers = mergeResolvers([user, game]);
   
     const server = new ApolloServer({ typeDefs, resolvers });
     

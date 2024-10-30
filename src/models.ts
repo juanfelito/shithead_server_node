@@ -24,7 +24,7 @@ export type Game = {
     playersOut: number[];
     state: GameState;
     turn: number;
-    users?: WithId<User>[];
+    users?: RecordId[];
 }
 
 export type User = {

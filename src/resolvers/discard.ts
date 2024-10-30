@@ -2,6 +2,10 @@ import { UserMediator } from "../mediators/user";
 import { In } from "../models";
 import { SurrealDBRepo } from "../repo";
 
+type GetUserArg = {
+    id: String
+}
+
 type CreateUserRequestInput = {
     name: String
 }
@@ -9,7 +13,7 @@ type CreateUserRequestInput = {
 export function user_resolvers(repo: SurrealDBRepo) {
     const resolvers = {
         Query: {
-            async getUser(_: null, args: {id: String}){
+            async getUser(_: null, args: GetUserArg){
                 return new UserMediator(repo).get_user(args.id);
             }
         },

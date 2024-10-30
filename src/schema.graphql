@@ -1,13 +1,13 @@
-# type Game {
-# 	creator: User
-# 	deck: [String!]
-# 	discard: Discard
-# 	id: String
-# 	playersOut: [Int!]
-# 	state: String
-# 	turn: Int
-# 	users: [User!]
-# }
+type Game {
+	creator: User
+	deck: [String!]
+	discard: Discard
+	id: String
+	playersOut: [Int!]
+	state: String
+	turn: Int
+	users: [User!]
+}
 
 # type Cards {
 # 	hand: [String!]
@@ -15,13 +15,13 @@
 # 	faceDown: [String!]
 # }
 
-# type Discard {
-# 	currentValue: String
-# 	currentCard: String
-# 	id: String
-# 	repeatCount: Int
-# 	cards: [String!]
-# }
+type Discard {
+	currentValue: String
+	currentCard: String
+	id: String
+	repeatCount: Int
+	cards: [String!]
+}
 
 # type Player {
 # 	id: String
@@ -36,7 +36,7 @@ type User {
 }
 
 type Mutation {
-	# createGame(in: CreateGameRequestInput): Game
+	createGame(in: CreateGameRequestInput): Game # Update the return for this mutation to ID or actually put the values
 	# startGame(in: StartGameRequestInput): Boolean
 	createUser(in: CreateUserRequestInput): ID
 	# joinGame(in: JoinGameRequestInput): Boolean
@@ -44,16 +44,16 @@ type Mutation {
 }
 
 type Query {
-	# getGame(id: ID!): Game
+	getGame(id: ID): Game
 	# getDiscard(game_id: ID!): Discard
 	getUser(id: ID): User
 	# getPlayer(user_id: ID!, game_id: ID!): Player
 	# getOponents(player_id: ID!, game_id: ID!): [Player]
 }
 
-# input CreateGameRequestInput {
-# 	creator: String
-# }
+input CreateGameRequestInput {
+	creatorId: String
+}
 
 input CreateUserRequestInput {
 	name: String
