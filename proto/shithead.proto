@@ -1,0 +1,128 @@
+syntax = "proto3";
+package shithead;
+
+service Game {
+    rpc CreateGame (CreateGameRequest) returns (CreateGameResponse);
+    rpc GetGame (GetGameRequest) returns (GetGameResponse);
+    rpc StartGame (StartGameRequest) returns (StartGameResponse);
+}
+
+service Discard {
+    rpc GetDiscard(GetDiscardRequest) returns (GetDiscardResponse);
+}
+
+service User {
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+    rpc GetUser (GetUserRequest) returns (GetUserResponse);
+}
+
+service Player {
+    rpc GetPlayer (GetPlayerRequest) returns (GetPlayerResponse);
+    rpc GetOponents (GetOpponentsRequest) returns (GetOpponentsResponse);
+    rpc JoinGame (JoinGameRequest) returns (JoinGameResponse);
+    rpc Play (PlayRequest) returns (PlayResponse);
+}
+
+message CreateGameRequest {
+    string creator = 1;
+}
+
+message CreateGameResponse {
+    string id = 1;
+}
+
+message GetGameRequest {
+    string id = 1;
+}
+
+message GetGameResponse {
+    string creator_id = 1;
+    repeated string deck = 2;
+    string discard_id = 3;
+    string id = 4;
+    repeated uint32 players_out = 5;
+    string state = 6;
+    uint32 turn = 7;
+    repeated GetUserResponse users = 8;
+}
+
+message GetDiscardRequest {
+    string game_id = 1;
+}
+
+message GetDiscardResponse {
+    optional string current_value = 1;
+    optional string current_card = 2;
+    string id = 3;
+    uint32 repeat_count = 4;
+    repeated string cards = 5;
+}
+
+message CreateUserRequest {
+    string name = 1;
+}
+
+message CreateUserResponse {
+    string id = 1;
+}
+
+message GetUserRequest {
+    string id = 1;
+}
+
+message GetUserResponse {
+    string id = 1;
+    string name = 2;
+}
+
+message JoinGameRequest {
+    string user_id = 1;
+    string game_id = 2;
+}
+
+message JoinGameResponse {}
+
+message GetOpponentsRequest {
+    string game_id = 1;
+    string player_id = 2;
+}
+
+message GetOpponentsResponse {
+    repeated GetPlayerResponse opponents = 1;
+}
+
+message GetPlayerRequest {
+    string game_id = 1;
+    string user_id = 2;
+}
+
+message Cards {
+    repeated string hand = 1;
+    repeated string face_up = 2;
+    repeated string face_down = 3;
+}
+
+message GetPlayerResponse {
+    string id = 1;
+    uint32 turn = 2;
+    Cards cards = 3;
+    string user_id = 4;
+}
+
+message StartGameRequest {
+    string user_id = 1;
+    string game_id = 2;
+}
+
+message StartGameResponse {}
+
+message PlayRequest {
+    string player_id = 1;
+    repeated string cards = 2;
+}
+
+message PlayResponse {
+    repeated string cards = 1;
+    bool turn_ended = 2;
+    string message = 3;
+}
