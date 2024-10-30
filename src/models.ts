@@ -2,6 +2,7 @@ import { RecordId } from "surrealdb";
 
 export type Option<T> = T | null;
 export type WithId<T> = T & { id: RecordId };
+export type In<T> = { in: T };
 
 export type Discard = {
     cards: String[],

@@ -1,34 +1,34 @@
-type Game {
-	creator: User
-	deck: [String!]
-	discard: Discard
-	id: String
-	playersOut: [Int!]
-	state: String
-	turn: Int
-	users: [User!]
-}
+# type Game {
+# 	creator: User
+# 	deck: [String!]
+# 	discard: Discard
+# 	id: String
+# 	playersOut: [Int!]
+# 	state: String
+# 	turn: Int
+# 	users: [User!]
+# }
 
-type Cards {
-	hand: [String!]
-	faceUp: [String!]
-	faceDown: [String!]
-}
+# type Cards {
+# 	hand: [String!]
+# 	faceUp: [String!]
+# 	faceDown: [String!]
+# }
 
-type Discard {
-	currentValue: String
-	currentCard: String
-	id: String
-	repeatCount: Int
-	cards: [String!]
-}
+# type Discard {
+# 	currentValue: String
+# 	currentCard: String
+# 	id: String
+# 	repeatCount: Int
+# 	cards: [String!]
+# }
 
-type Player {
-	id: String
-	turn: Int
-	cards: Cards
-	user: User
-}
+# type Player {
+# 	id: String
+# 	turn: Int
+# 	cards: Cards
+# 	user: User
+# }
 
 type User {
 	id: String
@@ -36,46 +36,46 @@ type User {
 }
 
 type Mutation {
-	createGame(in: CreateGameRequestInput): Game
-	startGame(in: StartGameRequestInput): Boolean
+	# createGame(in: CreateGameRequestInput): Game
+	# startGame(in: StartGameRequestInput): Boolean
 	createUser(in: CreateUserRequestInput): ID
-	joinGame(in: JoinGameRequestInput): Boolean
-	play(in: PlayRequestInput): PlayResponse
+	# joinGame(in: JoinGameRequestInput): Boolean
+	# play(in: PlayRequestInput): PlayResponse
 }
 
 type Query {
-	getGame(id: ID!): Game
-	getDiscard(game_id: ID!): Discard
-	getUser(id: ID!): User
-	getPlayer(user_id: ID!, game_id: ID!): Player
-	getOponents(player_id: ID!, game_id: ID!): [Player]
+	# getGame(id: ID!): Game
+	# getDiscard(game_id: ID!): Discard
+	getUser(id: ID): User
+	# getPlayer(user_id: ID!, game_id: ID!): Player
+	# getOponents(player_id: ID!, game_id: ID!): [Player]
 }
 
-input CreateGameRequestInput {
-	creator: String
-}
+# input CreateGameRequestInput {
+# 	creator: String
+# }
 
 input CreateUserRequestInput {
 	name: String
 }
 
-input JoinGameRequestInput {
-	userId: String
-	gameId: String
-}
+# input JoinGameRequestInput {
+# 	userId: String
+# 	gameId: String
+# }
 
-input PlayRequestInput {
-	playerId: String
-	cards: [String!]
-}
+# input PlayRequestInput {
+# 	playerId: String
+# 	cards: [String!]
+# }
 
-type PlayResponse {
-	cards: [String!]
-	turnEnded: Boolean
-	message: String
-}
+# type PlayResponse {
+# 	cards: [String!]
+# 	turnEnded: Boolean
+# 	message: String
+# }
 
-input StartGameRequestInput {
-	userId: String
-	gameId: String
-}
+# input StartGameRequestInput {
+# 	userId: String
+# 	gameId: String
+# }
