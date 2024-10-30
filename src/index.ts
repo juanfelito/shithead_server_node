@@ -7,6 +7,7 @@ import { mergeResolvers } from "@graphql-tools/merge";
 
 import { user_resolvers } from "./resolvers/user";
 import { game_resolvers } from "./resolvers/game";
+import { discard_resolvers } from "./resolvers/discard";
 
 async function start() {
     const typeDefs = gql`
@@ -18,8 +19,9 @@ async function start() {
 
     const user = user_resolvers(repo);
     const game = game_resolvers(repo);
+    const discard = discard_resolvers(repo);
 
-    const resolvers = mergeResolvers([user, game]);
+    const resolvers = mergeResolvers([user, game, discard]);
   
     const server = new ApolloServer({ typeDefs, resolvers });
     

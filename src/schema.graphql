@@ -9,11 +9,11 @@ type Game {
 	users: [User!]
 }
 
-# type Cards {
-# 	hand: [String!]
-# 	faceUp: [String!]
-# 	faceDown: [String!]
-# }
+type Cards {
+	hand: [String!]
+	faceUp: [String!]
+	faceDown: [String!]
+}
 
 type Discard {
 	currentValue: String
@@ -23,12 +23,12 @@ type Discard {
 	cards: [String!]
 }
 
-# type Player {
-# 	id: String
-# 	turn: Int
-# 	cards: Cards
-# 	user: User
-# }
+type Player {
+	id: String
+	turn: Int
+	cards: Cards
+	user: User
+}
 
 type User {
 	id: String
@@ -45,9 +45,9 @@ type Mutation {
 
 type Query {
 	getGame(id: ID): Game
-	# getDiscard(game_id: ID!): Discard
+	getDiscard(game_id: ID): Discard
 	getUser(id: ID): User
-	# getPlayer(user_id: ID!, game_id: ID!): Player
+	getPlayer(user_id: ID!, game_id: ID!): Player
 	# getOponents(player_id: ID!, game_id: ID!): [Player]
 }
 

@@ -1,3 +1,4 @@
+import { GraphQLError } from "graphql";
 import { User, WithId } from "../models";
 import { SurrealDBRepo } from "../repo";
 
@@ -11,7 +12,11 @@ export class UserMediator {
     async get_user(id: String): Promise<WithId<User>> {
         const maybeUser = await this.repo.get_user(id.toString());
         if (maybeUser == null) {
-            throw new Error("user not found");
+            throw new GraphQLError('User not found.', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                },
+            });
         }
 
         return maybeUser as WithId<User>;

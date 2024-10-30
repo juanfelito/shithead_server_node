@@ -1,26 +1,12 @@
-import { UserMediator } from "../mediators/user";
-import { In } from "../models";
+import { DiscardMediator } from "../mediators/discard";
 import { SurrealDBRepo } from "../repo";
 
-type GetUserArg = {
-    id: String
-}
-
-type CreateUserRequestInput = {
-    name: String
-}
-
-export function user_resolvers(repo: SurrealDBRepo) {
+export function discard_resolvers(repo: SurrealDBRepo) {
     const resolvers = {
         Query: {
-            async getUser(_: null, args: GetUserArg){
-                return new UserMediator(repo).get_user(args.id);
+            async getDiscard(_: null, args: {game_id: String}) {
+                return new DiscardMediator(repo).get_discard(args.game_id);
             }
-        },
-        Mutation: {
-            async createUser(_: null, input: In<CreateUserRequestInput>): Promise<String> {
-                return (await new UserMediator(repo).create_user(input.in.name)).id.toString();
-            },
         }
     }
 

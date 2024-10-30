@@ -1,3 +1,4 @@
+import { GraphQLError } from "graphql";
 import { Game, WithId } from "../models";
 import { SurrealDBRepo } from "../repo";
 
@@ -24,9 +25,12 @@ export class GameMediator {
     async get_game(id: String): Promise<WithId<Game>> {
         const maybeGame = await this.repo.get_game(id);
         if (maybeGame == null) {
-            throw new Error("game not found");
+            throw new GraphQLError('Game not found.', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                },
+            });
         }
-        console.log(maybeGame);
 
         return maybeGame as WithId<Game>;
     }
