@@ -1,5 +1,5 @@
 import Surreal, { RecordId } from "surrealdb";
-import { Discard, Game, GameState, Option, User, WithId } from "./models";
+import { Discard, Game, GameAndPlayer, GameState, Option, Player, User, WithId } from "./models";
 
 // Define the database configuration interface
 type DbConfig = {
@@ -40,9 +40,9 @@ export class SurrealDBRepo {
         const sql = `SELECT *, <-player<-user.* AS users FROM game:${id}`;
 
         const result = await this.db.query(sql);
-        const game = result[0] as WithId<Game>;
+        const game = result[0] as WithId<Game>[];
 
-        return game ? game : null;
+        return game[0] ? game[0] : null;
     }
 
     async get_user(id: string): Promise<Option<WithId<User>>> {
@@ -55,9 +55,9 @@ export class SurrealDBRepo {
         const sql = `SELECT discard FROM game:${game_id} fetch discard`;
 
         const result = await this.db.query(sql);
-        const discard = result[0] as WithId<Discard>;
+        const discard = result[0] as WithId<Discard>[];
 
-        return discard ? discard : null;
+        return discard[0] ? discard[0] : null;
     }
 
     async create_user(user: User): Promise<WithId<User>> {
@@ -104,5 +104,62 @@ export class SurrealDBRepo {
         }
 
         return discard
+    }
+
+    async join_game(game_id: String, user_id: String, turn: number): Promise<Option<WithId<Player>>> {
+        const sql = `RELATE user:${user_id}->player->game:${game_id} CONTENT {{turn: ${turn}, cards: {{hand: [], face_up: [], face_down: []}}}}`;
+
+        const result = await this.db.query(sql);
+        const player = result.at(0) as WithId<Player>[];
+
+        return player[0] ? player[0] : null;
+    }
+
+    async get_players(game_id: String): Promise<WithId<Player>[]> {
+        const sql = `SELECT * FROM player WHERE ->(game WHERE id = game:${game_id})`;
+
+        const result = await this.db.query(sql);
+        return result[0] as WithId<Player>[];
+    }
+
+    async get_player(game_id: String, user_id: String): Promise<Option<WithId<Player>>> {
+        const sql = `SELECT * FROM player WHERE <-(user WHERE id = user:${user_id}) AND ->(game WHERE id = game:${game_id})`;
+
+        const result = await this.db.query(sql);
+        const player = result.at(0) as WithId<Player>[];
+        
+        return player[0] ? player[0] : null;
+    }
+
+    async start_game(game: WithId<Game>, players: [WithId<Player>]): Promise<Option<WithId<Game>>> {
+        for (const player of players) {
+            await this.db.update("player", player)
+        }
+
+        const result = await this.db.update("game", game);
+        const updated_game = result.at(0) as WithId<Game>;
+
+        return updated_game ? updated_game : null;
+    }
+
+    async get_player_and_game(player_id: String): Promise<(GameAndPlayer)> {
+        const sql = `SELECT *, <-player<-user.* AS users FROM game WHERE <-(player WHERE id = player:${player_id}); SELECT * FROM player:${player_id};`;
+
+        const result = await this.db.query(sql);
+        const game = result.at(0) as WithId<Game>[];
+        const player = result.at(1) as WithId<Player>[];
+
+        const response: GameAndPlayer = {
+            game: game[0],
+            player: player[0],
+        }
+        
+        return response
+    }
+
+    async commit_play(game: WithId<Game>, discard: WithId<Discard>, player: WithId<Player>) {
+        await this.db.update("game", game);
+        await this.db.update("player", player);
+        await this.db.update("discard", discard);
     }
 }

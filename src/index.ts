@@ -8,9 +8,9 @@ async function main() {
     await repo.init();
 
     let user: User = {
-        name: "Felipe"
+        name: "Juan"
     }
-    let created_user = await repo.get_game("ws892xqnpjueujptyaqw");
+    let created_user = await repo.get_player_and_game("whi8nfe4b63mtqowub3t");
     console.log(created_user);
 }
 

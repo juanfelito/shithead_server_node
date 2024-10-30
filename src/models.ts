@@ -30,3 +30,19 @@ export type User = {
     name: String
 };
 
+export type Player = {
+    turn: number,
+    cards: Cards,
+    in: RecordId,
+}
+
+export type Cards = {
+    hand: string[],
+    face_up: string[],
+    face_down: string[],
+}
+
+export type GameAndPlayer = {
+    game: WithId<Game>,
+    player: WithId<Player>,
+}
