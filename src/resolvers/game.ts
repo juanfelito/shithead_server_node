@@ -1,6 +1,7 @@
 import { DiscardMediator } from "../mediators/discard";
 import { GameMediator } from "../mediators/game";
-import { Discard, Game, In, WithId } from "../models";
+import { PlayerMediator } from "../mediators/player";
+import { Discard, Game, In, Player, WithId } from "../models";
 import { SurrealDBRepo } from "../repo";
 
 type CreateGameRequestInput = {
@@ -12,7 +13,10 @@ export function game_resolvers(repo: SurrealDBRepo) {
         Game: {
             discard: async (parent: WithId<Game>): Promise<WithId<Discard>> => {
                 return await new DiscardMediator(repo).get_discard(parent.id.id.toString());
-            }
+            },
+            players: async (parent: WithId<Game>): Promise<WithId<Player>[]> => {
+                return await new PlayerMediator(repo).get_players(parent.id.id.toString(), false, null);
+            },
         },
         Query: {
             async getGame(_: null, args: {id: String}){
