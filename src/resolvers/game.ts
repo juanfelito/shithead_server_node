@@ -8,6 +8,11 @@ type CreateGameRequestInput = {
     creatorId: String
 }
 
+type StartGameRequestInput = {
+	userId: String
+	gameId: String
+}
+
 export function game_resolvers(repo: SurrealDBRepo) {
     const resolvers = {
         Game: {
@@ -26,6 +31,9 @@ export function game_resolvers(repo: SurrealDBRepo) {
         Mutation: {
             async createGame(_: null, input: In<CreateGameRequestInput>): Promise<String> {
                 return (await new GameMediator(repo).create_game(input.in.creatorId)).id.toString();
+            },
+            async startGame(_: null, input: In<StartGameRequestInput>): Promise<Boolean> {
+                return (await new GameMediator(repo).start_game(input.in.userId, input.in.gameId));
             },
         }
     }

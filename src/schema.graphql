@@ -38,7 +38,7 @@ type User {
 
 type Mutation {
 	createGame(in: CreateGameRequestInput): Game # Update the return for this mutation to ID or actually put the values
-	# startGame(in: StartGameRequestInput): Boolean
+	startGame(in: StartGameRequestInput): Boolean
 	createUser(in: CreateUserRequestInput): ID
 	joinGame(in: JoinGameRequestInput): Boolean
 	# play(in: PlayRequestInput): PlayResponse
@@ -76,7 +76,7 @@ input JoinGameRequestInput {
 # 	message: String
 # }
 
-# input StartGameRequestInput {
-# 	userId: String
-# 	gameId: String
-# }
+input StartGameRequestInput {
+	userId: String
+	gameId: String
+}

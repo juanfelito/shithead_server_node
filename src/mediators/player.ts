@@ -40,7 +40,6 @@ export class PlayerMediator {
 
     async join_game(game_id: String, user_id: String): Promise<Boolean> {
         const game = await this.repo.get_game(game_id);
-
         if (game == null) {
             throw new GraphQLError('Game not found.', {
                 extensions: {
