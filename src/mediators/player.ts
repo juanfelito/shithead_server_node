@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql";
-import { Option, Player, WithId } from "../models";
+import { GameState, Option, Player, WithId } from "../models";
 import { SurrealDBRepo } from "../repo";
 
 export class PlayerMediator {
@@ -59,23 +59,17 @@ export class PlayerMediator {
             });
         }
 
-        console.log(already_joined);
+        if (game.state != GameState.Lobby) {
+            throw new GraphQLError('Game already started.', {
+                extensions: {
+                    code: 'UNAVAILABLE',
+                },
+            });
+        }
 
+        const turn = users?.length as number;
+
+        await this.repo.join_game(game_id, user_id, turn);
         return true;
-
-
-        // if already_joined {
-        //     return Err(anyhow!(MediatorError::AlreadyExists("Already joined this game".to_string())));
-        // }
-        // if game.inner.state != GameState::Lobby {
-        //     return Err(anyhow!(MediatorError::Unavailable("Game already started".to_string())));
-        // }
-
-        // let turn = users.len();
-        // println!("joining game...");
-
-        // self.repo.join_game(game_id, user_id, turn)
-        //         .await?
-        //         .ok_or(anyhow!(MediatorError::Internal("Couldn't join the game".to_string())))
     }
 }
