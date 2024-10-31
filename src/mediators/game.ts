@@ -1,6 +1,8 @@
 import { GraphQLError } from "graphql";
-import { Game, GameState, WithId, User } from "../models";
+import { Game, GameState, WithId, User, Player } from "../models";
 import { SurrealDBRepo } from "../repo";
+import { new_deck } from "../card";
+import { Dealer } from "../dealer";
 
 export class GameMediator {
     repo: SurrealDBRepo
@@ -71,20 +73,24 @@ export class GameMediator {
             });
         }
 
-        return true;
+        let deck = new_deck(1);
 
-        // let mut deck = self.card_manager.new_deck(1);
+        let players = await this.repo.get_players(game_id);
 
-        // let mut players = self.repo.get_players(game_id).await?;
+        const dealer = new Dealer();
+        dealer.initial_deal(deck, players);
 
-        // Dealer::initial_deal(&mut deck, &mut players);
-
-        // game.inner.state = GameState::Started;
-        // game.inner.deck = deck;
-        // game.inner.users = None;
+        game.state = GameState.Started;
+        game.deck = deck;
         
-        // self.repo.start_game(game, players)
-        //         .await?
-        //         .ok_or(anyhow!(MediatorError::Internal("Couldn't start the game".to_string())))
+        const maybeGame = await this.repo.start_game(game, players);
+        if (maybeGame == null) {
+            throw new GraphQLError('There was an error starting the game.', {
+                extensions: {
+                    code: 'INTERNAL_SERVER_ERROR',
+                },
+            });
+        }
+        return true;
     }
 }

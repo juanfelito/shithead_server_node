@@ -76,7 +76,7 @@ export class SurrealDBRepo {
             creator: new RecordId("user", creator_id),
             deck: [],
             discard: discard_id,
-            playersOut: [],
+            players_out: [],
             state: GameState.Lobby,
             turn: 0,
         }
@@ -131,12 +131,12 @@ export class SurrealDBRepo {
         return player[0] ? player[0] : null;
     }
 
-    async start_game(game: WithId<Game>, players: [WithId<Player>]): Promise<Option<WithId<Game>>> {
+    async start_game(game: WithId<Game>, players: WithId<Player>[]): Promise<Option<WithId<Game>>> {
         for (const player of players) {
-            await this.db.update("player", player)
+            await this.db.update(player.id, player);
         }
 
-        const result = await this.db.update("game", game);
+        const result = await this.db.update(game.id.toString(), game);
         const updated_game = result.at(0) as WithId<Game>;
 
         return updated_game ? updated_game : null;

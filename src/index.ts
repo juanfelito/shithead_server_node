@@ -9,6 +9,7 @@ import { user_resolvers } from "./resolvers/user";
 import { game_resolvers } from "./resolvers/game";
 import { discard_resolvers } from "./resolvers/discard";
 import { player_resolvers } from "./resolvers/player";
+import { new_deck } from "./card";
 
 async function start() {
     const typeDefs = gql`
@@ -43,6 +44,8 @@ start();
 async function main() {
     let repo = new SurrealDBRepo();
     await repo.init();
+
+    new_deck(1);
 
     let user: User = {
         name: "Juan"

@@ -19,9 +19,9 @@ export enum GameState {
 
 export type Game = {
     creator: RecordId;
-    deck: string[];
+    deck: String[];
     discard: RecordId;
-    playersOut: number[];
+    players_out: number[];
     state: GameState;
     turn: number;
     users?: WithId<User>[];
@@ -38,9 +38,9 @@ export type Player = {
 }
 
 export type Cards = {
-    hand: string[],
-    face_up: string[],
-    face_down: string[],
+    hand: String[],
+    face_up: String[],
+    face_down: String[],
 }
 
 export type GameAndPlayer = {
