@@ -136,7 +136,7 @@ export class SurrealDBRepo {
             await this.db.update(player.id, player);
         }
 
-        const result = await this.db.update(game.id.toString(), game);
+        const result = await this.db.update(game.id, game);
         const updated_game = result.at(0) as WithId<Game>;
 
         return updated_game ? updated_game : null;
